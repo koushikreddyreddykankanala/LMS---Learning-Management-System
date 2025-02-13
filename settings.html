@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - LMS</title>
+    <style>
+        /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Profile Container */
+.profile-container {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 80%;
+    max-width: 500px;
+}
+
+/* Profile Picture */
+.profile-pic-container {
+    position: relative;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-pic-container img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #007bff;
+}
+
+.profile-pic-container input {
+    display: none;
+}
+
+.profile-pic-container label {
+    display: block;
+    margin-top: 10px;
+    cursor: pointer;
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* Profile Section */
+.profile-section {
+    text-align: left;
+}
+
+h1 {
+    color: #333;
+}
+
+h2 {
+    text-align: left;
+    color: #444;
+    margin-top: 15px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+input[type="text"], 
+input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Progress Bar */
+.progress-bar {
+    width: 100%;
+    background: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 10px;
+    margin-top: 10px;
+}
+
+.progress {
+    height: 100%;
+    background: #28a745;
+    width: 0%;
+}
+
+/* Buttons */
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* Dark Mode */
+.dark-mode {
+    background: #222 !important;
+    color: white !important;
+}
+
+.dark-mode .profile-container {
+    background: #333;
+    color: white;
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode input {
+    background: #444;
+    color: white;
+    border: 1px solid #666;
+}
+
+    </style>
+    <script>
+        // Load Student Data from Local Storage
+window.onload = function() {
+    document.getElementById("studentId").value = localStorage.getItem("studentId") || "12417204";
+    document.getElementById("fullName").value = localStorage.getItem("fullName") || "Koushik Reddy";
+    document.getElementById("email").value = localStorage.getItem("email") || "koushikreddy@gmail.com";
+    document.getElementById("attendance").value = localStorage.getItem("attendance") || "95%";
+    document.getElementById("cgpa").value = localStorage.getItem("cgpa") || "7.8";
+    
+    let progress = localStorage.getItem("courseProgress") || "70";
+    document.getElementById("courseProgress").style.width = progress + "%";
+
+    if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+    }
+
+    let savedPic = localStorage.getItem("profilePic");
+    if (savedPic) {
+        document.getElementById("profile-pic").src = savedPic;
+    }
+}
+
+// Save Profile Data
+function saveProfile() {
+    localStorage.setItem("fullName", document.getElementById("fullName").value);
+    localStorage.setItem("email", document.getElementById("email").value);
+    alert("Profile saved successfully!");
+}
+
+// Dark Mode Toggle
+document.getElementById("darkModeToggle").addEventListener("click", function() {
+    document.body.classList.toggle("dark-mode");
+    localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+});
+
+// Profile Picture Upload
+document.getElementById("upload-pic").addEventListener("change", function(event) {
+    let file = event.target.files[0];
+    if (file) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById("profile-pic").src = e.target.result;
+            localStorage.setItem("profilePic", e.target.result);
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+    </script>
+</head>
+<body>
+
+    <div class="profile-container">
+        <!-- Student Information -->
+        <div class="profile-section">
+            <h2>Student Information</h2>
+            
+            <label>Student ID:</label>
+            <input type="text" id="studentId" disabled>
+
+            <label>Full Name:</label>
+            <input type="text" id="fullName">
+
+            <label>Email:</label>
+            <input type="email" id="email">
+
+            <label>Attendance:</label>
+            <input type="text" id="attendance" disabled>
+
+            <label>Course Progress:</label>
+            <div class="progress-bar">
+                <div class="progress" id="courseProgress"></div>
+            </div>
+
+            <label>CGPA:</label>
+            <input type="text" id="cgpa" disabled>
+
+            <button onclick="saveProfile()">Save Profile</button>
+        </div>
+        
+        <button id="darkModeToggle">Toggle Dark Mode</button>
+    </div>
+</body>
+</html>
